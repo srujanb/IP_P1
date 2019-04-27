@@ -12,9 +12,9 @@ public class Client {
     private static final String HOST_IP = "localhost";
     static Scanner scanner = new Scanner(System.in);
 
-    static Socket socket;
-    static DataOutputStream dOutToServer;
-    static DataInputStream dInFromServer;
+    private static Socket socket;
+    private static DataOutputStream dOutToServer;
+    private static DataInputStream dInFromServer;
 
     public static void main(String[] args) {
         try {
@@ -26,15 +26,32 @@ public class Client {
             return;
         }
 
-        while (scanner.hasNext()) {
+        while (true) {
             String userRequest = scanner.nextLine();
-            System.out.println("User request: " + userRequest);
-            try {
-                dOutToServer.writeUTF(userRequest);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            handleUserRequest(userRequest);
         }
     }
+
+    private static void handleUserRequest(String userRequest) {
+        StringBuilder builder = new StringBuilder(userRequest).append("\n");
+        String nextLine;
+        while ((nextLine = scanner.nextLine()) != null){
+            builder.append(nextLine).append("\n");
+            if (nextLine.equals("")) break;
+        }
+        try {
+            sendRequestToServer(builder.toString());
+        } catch (IOException e) {
+            //TODO remove stack trace
+            e.printStackTrace();
+            System.out.println("ERROR SENDING REQUEST TO SERVER.");
+        }
+    }
+
+    private static void sendRequestToServer(String userRequest) throws IOException {
+        System.out.println("Sending request to server:\n" + userRequest);
+        dOutToServer.writeUTF(userRequest);
+    }
+
 
 }
