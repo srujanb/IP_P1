@@ -14,7 +14,7 @@ public class ClientHandler extends Thread {
     DataOutputStream dOutToClient;
     DataInputStream dInFromClient;
 
-    public ClientHandler(Socket socket) throws Exception{
+    public ClientHandler(Socket socket) throws Exception {
         this.socket = socket;
         dOutToClient = new DataOutputStream(socket.getOutputStream());
         dInFromClient = new DataInputStream(socket.getInputStream());
@@ -25,11 +25,11 @@ public class ClientHandler extends Thread {
     @Override
     public void run() {
         super.run();
-        while (true){
+        while (true) {
             try {
                 String clientRequest = dInFromClient.readUTF();
                 handleRequest(clientRequest);
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("Couldn't handle client request.");
 
@@ -37,21 +37,20 @@ public class ClientHandler extends Thread {
         }
     }
 
-    private void handleRequest(String clientRequestBundle) throws Exception{
+    private void handleRequest(String clientRequestBundle) throws Exception {
         System.out.println("Client request: " + clientRequestBundle);
         String[] lines = clientRequestBundle.split("\n");
         String[] firstLinesTokens = lines[0].split(" ");
         int linesForThisRequest = 1;
-        if (firstLinesTokens[0].equals("GET_NEXT_AVAILABLE_PORT")){
+        if (firstLinesTokens[0].equals("GET_NEXT_AVAILABLE_PORT")) {
             linesForThisRequest = 1;
             sendMessage(String.valueOf(++MyServer.NEXT_AVAILABLE_PORT));
-        }
-        else if (firstLinesTokens[0].equals("ADD")){
-            if (firstLinesTokens[1].equals("RFC")){
+        } else if (firstLinesTokens[0].equals("ADD")) {
+            if (firstLinesTokens[1].equals("RFC")) {
                 linesForThisRequest = 4;
                 RFC rfc = new RFC();
                 int rfcNumber = Integer.valueOf(firstLinesTokens[2]);
-                rfc.setNumber( rfcNumber );
+                rfc.setNumber(rfcNumber);
                 rfc.setTitle(CommonConstants.rfcTitle[rfcNumber]);
 
                 String[] secondLinesTokens = lines[1].split(" ");
@@ -64,14 +63,13 @@ public class ClientHandler extends Thread {
 
                 System.out.println("rfcs size: " + MyServer.rfcs.size());
             }
-        }
-        else if (firstLinesTokens[0].equals("LOOKUP")){
+        } else if (firstLinesTokens[0].equals("LOOKUP")) {
             linesForThisRequest = 4;
             int rfcNumber = Integer.parseInt(firstLinesTokens[2]);
             String title = lines[3].split(" ")[1];
             StringBuilder builder = new StringBuilder("");
-            for (RFC rfc:  MyServer.rfcs){
-                if (rfc.getNumber() == rfcNumber && rfc.getTitle().equals(title)){
+            for (RFC rfc : MyServer.rfcs) {
+                if (rfc.getNumber() == rfcNumber && rfc.getTitle().equals(title)) {
                     builder.append("RFC")
                             .append(" ")
                             .append(rfcNumber)
@@ -82,17 +80,37 @@ public class ClientHandler extends Thread {
                             .append("\n");
                 }
             }
-            if (!builder.toString().equals("")){
+            if (!builder.toString().equals("")) {
                 sendMessage(builder.toString());
             } else {
                 //TODO throw exception if builder equals "" or bad request.
                 System.out.println("Did not find any matching hosts");
             }
+        } else if (firstLinesTokens[0].equals("LIST")) {
+            if (firstLinesTokens[1].equals("ALL")) {
+                linesForThisRequest = 3;
+                StringBuilder builder = new StringBuilder("");
+                for (RFC rfc : MyServer.rfcs) {
+                    builder.append("RFC")
+                            .append(" ")
+                            .append(rfc.getNumber())
+                            .append(" ")
+                            .append(rfc.getHost())
+                            .append(" ")
+                            .append(rfc.getUploadPort())
+                            .append("\n");
+                }
+                if (!builder.toString().equals("")){
+                    sendMessage(builder.toString());
+                } else {
+                    System.out.println("No RFCs by any hosts");
+                }
+            }
         }
 
         //call handleRequest again with the remaining command
         StringBuilder remainingCommand = new StringBuilder("");
-        for (int i = linesForThisRequest; i < lines.length; i++){
+        for (int i = linesForThisRequest; i < lines.length; i++) {
             remainingCommand.append(lines[i]).append("\n");
         }
         if (!remainingCommand.toString().equals("") && !remainingCommand.toString().equals("\n"))
