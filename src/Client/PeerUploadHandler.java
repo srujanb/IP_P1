@@ -5,14 +5,14 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-public class PeerHandler extends Thread {
+public class PeerUploadHandler extends Thread {
 
     private DataInputStream dIn;
     private DataOutputStream dOut;
 
     private Client callingClient;
 
-    PeerHandler(Socket socket,Client callingClient) {
+    PeerUploadHandler(Socket socket, Client callingClient) {
         this.callingClient = callingClient;
         try {
             dIn = new DataInputStream(socket.getInputStream());

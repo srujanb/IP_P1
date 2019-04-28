@@ -95,14 +95,26 @@ public class Client {
             builder.append(nextLine).append("\n");
             if (nextLine.equals("")) break;
         }
-        try {
-            sendRequestToServer(builder.toString());
-            String result = dInFromServer.readUTF();
-            System.out.println("\n" + result + "\n");
-        } catch (IOException e) {
-            //TODO remove stack trace
-            e.printStackTrace();
-            System.out.println("ERROR SENDING REQUEST TO SERVER.");
+
+        String requestType = builder.toString()
+                .split("\n")[0]
+                .split(" ")[0];
+        //if P2P request
+        if (requestType.equals("GET")){
+            new PeerDownloadHandler(builder.toString());
+        }
+
+        //if P2S request
+        else {
+            try {
+                sendRequestToServer(builder.toString());
+                String result = dInFromServer.readUTF();
+                System.out.println("\n" + result + "\n");
+            } catch (IOException e) {
+                //TODO remove stack trace
+                e.printStackTrace();
+                System.out.println("ERROR SENDING REQUEST TO SERVER.");
+            }
         }
     }
 

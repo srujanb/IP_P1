@@ -1,9 +1,7 @@
 package Client;
 
-import Server.ClientHandler;
 
 import java.net.ServerSocket;
-import java.net.Socket;
 
 public class UploadServer extends Thread {
 
@@ -23,7 +21,7 @@ public class UploadServer extends Thread {
             try (ServerSocket serverSocket = new ServerSocket(PORT_NUMBER)) {
                 System.out.println("Upload server started.\n");
                 while (true) {
-                    new PeerHandler(serverSocket.accept(), callingClient);
+                    new PeerUploadHandler(serverSocket.accept(), callingClient);
                 }
             }
         }catch (Exception e){
