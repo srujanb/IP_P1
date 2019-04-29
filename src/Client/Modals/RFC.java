@@ -1,9 +1,6 @@
 package Client.Modals;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -34,29 +31,29 @@ public class RFC {
     }
 
     public String getFileContent() {
-        StringBuilder builder;
+        StringBuilder builder = new StringBuilder("");
         try {
-            builder = new StringBuilder("");
-            File file = new File("RFCs/" + number + ".txt");
+            FileReader fr = new FileReader("RFCs/" + number + ".txt");
 
-            BufferedReader br = new BufferedReader(new FileReader(file));
-
-            String st;
-            while ((st = br.readLine()) != null)
-                builder.append(st);
+            int i;
+            while ((i=fr.read()) != -1)
+                builder.append((char) i);
             return builder.toString();
-        } catch (Exception e) {
+        } catch (Exception e){
             e.printStackTrace();
         }
+
         return "Error reading file data.";
     }
 
     public void setFileContent(String content) {
         try {
-            Files.write(Paths.get("NEWRFCs/" + number + ".txt"), content.getBytes());
+            Files.write(Paths.get("RFCs/" + number + "_new.txt"), content.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        System.out.println(content);
     }
 
     public String getLastModified() {
