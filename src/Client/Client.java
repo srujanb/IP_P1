@@ -30,7 +30,7 @@ public class Client {
     }
 
     private Client() {
-        for (int i = 0; i < 5; i++){
+        for (int i = 1; i < 9; i++){
             RFC rfc = new RFC(i);
             rfc.setTitle(CommonConstants.rfcTitle[i]);
             rfcs.put(i,rfc);

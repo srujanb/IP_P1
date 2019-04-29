@@ -49,11 +49,11 @@ public class RFC {
     public void setFileContent(String content) {
         try {
             Files.write(Paths.get("RFCs/" + number + "_new.txt"), content.getBytes());
+            System.out.println("File saved.");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        System.out.println(content);
     }
 
     public String getLastModified() {
