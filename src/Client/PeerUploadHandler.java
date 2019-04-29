@@ -40,10 +40,10 @@ public class PeerUploadHandler extends Thread {
                 if (requestItem.equals("RFC"))
                     result = callingClient.rfcs.get(Integer.parseInt(firstLineTokens[2])).getFileContent();
 
-            //TODO handle request to send file.
-            dOut.writeUTF("Here is the file : " + result);
+            dOut.writeUTF(result);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 }
