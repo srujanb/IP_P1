@@ -1,6 +1,30 @@
 Get RFC:
 
-GET RFC 7 P2P
+LIST ALL P2P-CI/1.0
+Host: localhost
+Port: 7736
+
+LOOKUP RFC 1 P2P-CI/1.0
+Host: localhost
+Port: 7736
+Title: Host_Software
+
+//505
+LOOKUP RFC 1 P2P-CI/1.1
+Host: localhost
+Port: 7736
+Title: Host_Software
+
+//404 Not Found
+LOOKUP RFC 20 P2P-CI/1.0
+Host: localhost
+Port: 7736
+Title: Host_Software
+
+//400
+Hi Hello
+
+GET RFC 7 P2P-CI/1.0
 Host: localhost
 OS: MAC
 Port: 7735
