@@ -51,7 +51,7 @@ public class PeerDownloadHandler extends Thread {
         //TODO for loop starting point appropriate.
         String[] lines = response.split("\n");
         StringBuilder builder = new StringBuilder("");
-        for (int i = 0; i < lines.length;  i++){
+        for (int i = 6; i < lines.length;  i++){
             builder.append(lines[i]).append("\n");
         }
         RFC  rfc =  new RFC(RFCNumber);

@@ -1,13 +1,12 @@
 package Client.Modals;
 
-import Utils.CommonConstants;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 
 public class RFC {
 
@@ -58,5 +57,16 @@ public class RFC {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getLastModified() {
+        File file = new File("RFCs/" + number + ".txt");
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        return sdf.format(file.lastModified());
+    }
+
+    public long getFileSize() {
+        File file = new File("RFCs/" + number + ".txt");
+        return file.length();
     }
 }
